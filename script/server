@@ -10,7 +10,7 @@ function consul_server {
 
   case "${1:-}" in
     default)
-      exec consul agent -config-dir="$shome/etc" -join $CACHE_VIP
+      exec consul agent -config-dir="$shome/etc" -join consul
       ;;
     *)
       echo "ERROR: unknown server command: ${1:-/not-supplied/}" 1>&2
