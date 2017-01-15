@@ -10,6 +10,9 @@ function consul_server {
 
   case "${1:-}" in
     default)
+      while ! ping -c 1 -t 1 consul; do
+        sleep 1
+      done
       exec consul agent -config-dir="$shome/etc" -join consul
       ;;
     *)
