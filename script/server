@@ -13,7 +13,8 @@ function consul_server {
       while ! ping -c 1 -t 1 consul; do
         sleep 1
       done
-      exec consul agent -config-dir="$shome/etc" -join consul
+      local ip_client="$(ifconfig eth0 | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)"
+      exec consul agent -config-dir="$shome/etc" -join consul -advertise "$ip_client"
       ;;
     *)
       echo "ERROR: unknown server command: ${1:-/not-supplied/}" 1>&2
