@@ -7,7 +7,7 @@ function bootstrap {
   source "$shome/script/profile"
 
   local url_consul_template_Darwin="https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_darwin_amd64.zip"
-  local url_consul_template_Linux="https://releases.hashicorp.com/consul_-emplate/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip"
+  local url_consul_template_Linux="https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip"
 
   local url_consul_template="url_consul_template_$(uname -s)"
   local fnm_consul_template="$(basename "${!url_consul_template}")"
