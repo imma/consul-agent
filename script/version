@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+function version {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  local ver_consul_template="$(consul-template --version 2>&1 | awk '{print $2}' | perl -pe 's{^v}{}' || true)"
+  jq -n --arg consul_template "$ver_consul_template" '{consul_template: $consul_template}'
+}
+
+version "$@"
