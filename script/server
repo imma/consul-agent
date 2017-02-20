@@ -10,10 +10,12 @@ function consul_server {
 
   case "${1:-}" in
     default)
-      while ! ping -c 1 -t 1 consul; do
+      exec 2>&1
+      set -x
+      while ! ping -c 1 -t 3 consul; do
         sleep 1
       done
-      local ip_client="$(ifconfig eth0 | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)"
+      local ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 enp0s8 | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)"
       exec consul agent -config-dir="$shome/etc" -join consul -advertise "$ip_client"
       ;;
     *)
