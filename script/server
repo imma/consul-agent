@@ -40,8 +40,21 @@ function consul_server {
         sleep 1
       done
 
-      local ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 enp0s8 | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)"
-      exec consul agent -config-dir="$pth_config" -join "$hst_consul" -advertise "$ip_client"
+      local nm_node=
+      local ip_client=
+
+      case "$(uname -s)" in
+        Darwin)
+          ip_client="172.28.128.1"
+          nm_node="$(uname -n )"
+          nm_node="nih"
+          ;;
+        *)
+          ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 enp0s8 | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)"
+          ;;
+      esac
+
+      exec consul agent -config-dir="$pth_config" -join "$hst_consul" -advertise "$ip_client" ${nm_node:+-node="${nm_node}" }
       ;;
     *)
       echo "ERROR: unknown server command: ${1:-/not-supplied/}" 1>&2
