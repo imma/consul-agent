@@ -40,19 +40,12 @@ function consul_server {
         sleep 1
       done
 
-      local nm_node=
-      local ip_client=
+      local ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 enp0s8 vboxnet0 | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)"
 
-      case "$(uname -s)" in
-        Darwin)
-          ip_client="172.28.128.1"
-          nm_node="$(uname -n )"
-          nm_node="nih"
-          ;;
-        *)
-          ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 enp0s8 vboxnet0 | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)"
-          ;;
-      esac
+      local nm_node=
+      if [[ "$ip_client" == "172.28.128.1" ]]; then
+        nm_node=nih
+      fi
 
       exec consul agent -config-dir="$pth_config" -join "$hst_consul" -advertise "$ip_client" ${nm_node:+-node="${nm_node}" }
       ;;
