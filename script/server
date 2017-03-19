@@ -50,7 +50,7 @@ function consul_server {
           nm_node="nih"
           ;;
         *)
-          ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 enp0s8 | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)"
+          ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 enp0s8 vboxnet0 | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)"
           ;;
       esac
 
