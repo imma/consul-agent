@@ -40,7 +40,7 @@ function consul_server {
         sleep 1
       done
 
-      local ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 enp0s8 vboxnet0 | grep 'inet addr' | awk '{print $2}' | cut -d: -f2)"
+      local ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 enp0s8 vboxnet0 | grep 'inet ' | awk '{print $2}' | cut -d: -f2)"
 
       local nm_node=
       if [[ "$ip_client" == "172.28.128.1" ]]; then
