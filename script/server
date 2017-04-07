@@ -47,7 +47,14 @@ function consul_server {
         nm_node=nih
       fi
 
-      exec consul agent -config-dir="$pth_config" -join "$hst_consul" -advertise "$ip_client" ${nm_node:+-node="${nm_node}" }
+      local opt_consul=
+      if [[ "$(cat /proc/sys/kernel/random/boot_id 2>/dev/null)" == "$(cat "$BLOCK_PATH/consul/data/node-id" 2>/dev/null)" ]]; then
+        if [[ "$(uname -n)" != "consul" ]]; then
+          opt_consul="-node-id $(cat /proc/sys/kernel/random/uuid)"
+        fi
+      fi
+
+      exec consul agent -config-dir="$pth_config" -join "$hst_consul" -advertise "$ip_client"${nm_node:+ -node="${nm_node}"}${opt_consul:+ $opt_consul}
       ;;
     *)
       echo "ERROR: unknown server command: ${1:-/not-supplied/}" 1>&2
