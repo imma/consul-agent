@@ -48,7 +48,7 @@ function consul_server {
       fi
 
       if [[ "$(cat /proc/sys/kernel/random/boot_id 2>/dev/null)" == "$(cat "$BLOCK_PATH/consul/data/node-id" 2>/dev/null)" ]]; then
-        if [[ "$(uname -n)" != "consul" ]]; then
+        if [[ "${SERVICE_8500_NAME:-}" != "consul" ]]; then 
           cat /proc/sys/kernel/random/uuid > "$BLOCK_PATH/consul/data/node-id.1"
           mv -f "$BLOCK_PATH/consul/data/node-id.1" "$BLOCK_PATH/consul/data/node-id"
         fi
