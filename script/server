@@ -15,12 +15,12 @@ function consul_server {
 
       local hst_consul=
       while true; do
-        if ping -c 1 -t 3 -W 3 consul.service.consul; then
-          hst_consul='consul.service.consul'
-          break
-        fi
         if ping -c 1 -t 3 -W 3 consul; then
           hst_consul='consul'
+          break
+        fi
+        if ping -c 1 -t 3 -W 3 consul.service.consul; then
+          hst_consul='consul.service.consul'
           break
         fi
         sleep 1
