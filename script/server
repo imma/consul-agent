@@ -40,7 +40,7 @@ function consul_server {
         sleep 1
       done
 
-      local ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 enp0s8 vboxnet0 | grep 'inet ' | awk '{print $2}' | cut -d: -f2)"
+      local ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 ens3 enp0s8 vboxnet0 | grep 'inet ' | awk '{print $2}' | cut -d: -f2)"
 
       exec consul agent -disable-host-node-id -config-dir="$pth_config" -join "$hst_consul" -advertise "$ip_client" -ui -node "$(uname -n)"
       ;;
