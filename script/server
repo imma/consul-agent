@@ -26,19 +26,7 @@ function consul_server {
         sleep 1
       done
       
-      local pth_config=
-      while true; do
-        if [[ -f "$shome/etc/consul.json" ]]; then
-          pth_config="$shome/etc"
-          break
-        fi 
-
-        if [[ -f "/config/consul/etc/consul.json" ]]; then
-          pth_config="/config/consul/etc"
-          break
-        fi 
-        sleep 1
-      done
+      local pth_config="$shome/config/consul"
 
       local ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 ens3 enp0s8 vboxnet0 | grep 'inet ' | awk '{print $2}' | cut -d: -f2)"
 
