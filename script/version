@@ -5,7 +5,11 @@ function version {
   source "$shome/script/profile"
 
   local ver_consul_template="$(consul-template --version 2>&1 | awk '{print $2}' | perl -pe 's{^v}{}' || true)"
-  jq -n --arg consul_template "$ver_consul_template" '{consul_template: $consul_template}'
+  local ver_confd="$(confd --version 2>/dev/null | awk '{print $2}' || true)"
+  jq -n \
+    --arg consul_template "$ver_consul_template" \
+    --arg confd "$ver_confd" \
+      '{consul_template: $consul_template, confd: $confd}'
 }
 
 version "$@"
