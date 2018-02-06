@@ -10,27 +10,8 @@ function consul_server {
 
   case "${1:-}" in
     default)
-      exec 2>&1
-      set -x
-
-      local hst_consul=
-      while true; do
-        if ping -c 1 -t 3 -W 3 consul; then
-          hst_consul='consul'
-          break
-        fi
-        if ping -c 1 -t 3 -W 3 consul.service.consul; then
-          hst_consul='consul.service.consul'
-          break
-        fi
-        sleep 1
-      done
-      
-      local pth_config="$shome/config/consul"
-
-      local ip_client="$(runmany 'ifconfig $1 2>/dev/null || true' eth0 ens3 enp0s8 vboxnet0 | grep 'inet ' | awk '{print $2}' | cut -d: -f2)"
-
-      exec consul agent -disable-host-node-id -config-dir="$pth_config" -join "$hst_consul" -advertise "$ip_client" -ui -node "$(uname -n)"
+      shift # default
+      exec consul agent "$@"
       ;;
     *)
       echo "ERROR: unknown server command: ${1:-/not-supplied/}" 1>&2
